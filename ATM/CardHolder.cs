@@ -77,6 +77,7 @@ namespace ConsoleApp2
     }
     public class Atm
     {
+        public bool resetFlag = false;
        
         public void printOption()
         {
@@ -122,10 +123,34 @@ namespace ConsoleApp2
         }
         public void resetPin(CardHolder cardHolder)
         {
+            if (resetFlag == false)
+            {
             a:
-            Console.WriteLine("|    enter your current pin number");
-            int currentPin = int.Parse(Console.ReadLine());
-            if (currentPin == cardHolder.GetPin())
+                Console.WriteLine("|    enter your current pin number");
+                int currentPin = int.Parse(Console.ReadLine());
+                if (currentPin == cardHolder.GetPin())
+                {
+                    Console.WriteLine("|    please enter your new pin");
+                    int newPin = int.Parse(Console.ReadLine());
+                    Console.WriteLine("|    verify your new pin");
+                    int verifyPin = int.Parse(Console.ReadLine());
+                    if (newPin == verifyPin)
+                    {
+                        cardHolder.setPin(newPin);
+                        Console.WriteLine($"|   pin reset successfully ,your new pin is {cardHolder.GetPin()}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("|    ***pin dont match,try again***");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("|    ***incorrect pin,try again***");
+                    goto a;
+                }
+            }
+            else
             {
                 Console.WriteLine("|    please enter your new pin");
                 int newPin = int.Parse(Console.ReadLine());
@@ -133,6 +158,7 @@ namespace ConsoleApp2
                 int verifyPin = int.Parse(Console.ReadLine());
                 if (newPin == verifyPin)
                 {
+                    cardHolder.setPin(newPin);
                     Console.WriteLine($"|   pin reset successfully ,your new pin is {cardHolder.GetPin()}");
                 }
                 else
@@ -140,11 +166,8 @@ namespace ConsoleApp2
                     Console.WriteLine("|    ***pin dont match,try again***");
                 }
             }
-            else
-            {
-                Console.WriteLine("|    ***incorrect pin,try again***");
-                goto a;
-            }
+            resetFlag = false;
+            
         }
        
         public void WelcomeMsg()
@@ -279,6 +302,7 @@ _______________________________________________________WELCOME TO CCN ATM SERVIC
 
                 if (cardHolder.GetNumber()== phoneNumber)
                 {
+                resetFlag = true;
                     resetPin(cardHolder);
 
                 }
